@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
@@ -168,6 +169,30 @@ public class Helper {
         Toast toast = Toast.makeText(context, "", duration);
         toast.setText("知了：" + text);
         toast.show();
+    }
+
+    public static void toastIfVersionChange(CharSequence text, int duration) {
+        long lastAppVersion = prefs.getLong("app_version", 0);
+        long nowAppVersion;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            nowAppVersion = packageInfo.getLongVersionCode();
+        } else {
+            nowAppVersion = (long) packageInfo.versionCode;
+        }
+
+        if (nowAppVersion > lastAppVersion) {
+            toast(text, duration);
+        }
+    }
+
+    public static void saveAppVersion() {
+        long nowAppVersion;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            nowAppVersion = packageInfo.getLongVersionCode();
+        } else {
+            nowAppVersion = (long) packageInfo.versionCode;
+        }
+        prefs.edit().putLong("app_version", nowAppVersion).apply();
     }
 
     public interface IClassCheck {
@@ -333,4 +358,5 @@ public class Helper {
             ObjectNode_put = ObjectNode.getDeclaredMethod("put", String.class, JsonNode);
         }
     }
+
 }

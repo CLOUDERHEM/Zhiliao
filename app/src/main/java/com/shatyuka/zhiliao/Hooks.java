@@ -42,7 +42,7 @@ import com.shatyuka.zhiliao.hooks.ZhihuPreference;
 import de.robv.android.xposed.XposedBridge;
 
 public class Hooks {
-    static final IHook[] hooks = {
+    static final IHook[] HOOKS = {
             new ZhihuPreference(),
             new LaunchAd(),
             new CustomFilter(),
@@ -81,15 +81,20 @@ public class Hooks {
     };
 
     public static void init(final ClassLoader classLoader) {
-        for (IHook hook : hooks) {
+        for (IHook hook : HOOKS) {
             try {
                 hook.init(classLoader);
                 hook.hook();
             } catch (Throwable e) {
-                Helper.toast(hook.getName() + "功能加载失败，可能不支持当前版本知乎: " + Helper.packageInfo.versionName, Toast.LENGTH_LONG);
+                Helper.toastIfVersionChange(hook.getName() + "功能加载失败，可能不支持当前版本知乎: " + Helper.packageInfo.versionName, Toast.LENGTH_LONG);
                 XposedBridge.log("[Zhiliao] " + e);
                 XposedBridge.log(e);
             }
         }
+        afterHooksInit();
+    }
+
+    private static void afterHooksInit() {
+        Helper.saveAppVersion();
     }
 }
