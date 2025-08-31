@@ -176,6 +176,8 @@ class CardViewFeatureShortFilter : BaseHook() {
                     if (relatedQueries != null) {
                         JacksonHelper.ObjectNode_put.invoke(relatedQueries, "queries", null)
                     }
+
+                    JacksonHelper.ObjectNode_put.invoke(thirdBusiness, "ring", null)
                 }
             } catch (e: Exception) {
                 logE(e)
