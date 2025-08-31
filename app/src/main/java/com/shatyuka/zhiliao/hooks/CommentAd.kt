@@ -14,6 +14,7 @@ class CommentAd : BaseHook() {
 
             override fun intercept(body: String): String {
                 return body.replace("ad_plugin_infos", "ad_plugin_infos_del_del")
+                    .replace("atmosphere_voting_config", "atmosphere_voting_config_del")
             }
         })
     }
